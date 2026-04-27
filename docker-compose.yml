@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: log_postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+
+  elasticsearch:
+    image: elasticsearch:8.11.0
+    container_name: log_elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    ports:
+      - "9200:9200"
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: log_grafana
+    ports:
+      - "3000:3000"
+
+  kibana:
+    image: kibana:8.11.0
+    container_name: log_kibana
+    ports:
+      - "5601:5601"

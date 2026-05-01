@@ -9,6 +9,17 @@ class EnvError(Exception):
 _env = dotenv_values(find_dotenv())
 
 
+import sys
+
+def get_env(key: str) -> str:
+    value = _env.get(key)
+    if value is None or value.strip() == "":
+        print(f"\n❌ [ENV ERROR] Missing required variable: {key}")
+        print(f"Please check your .env file.\n")
+        sys.exit(1)
+    return value.strip()
+
+
 def get_required_env(*keys: str) -> dict:
     missing = []
     values = {}
@@ -22,8 +33,8 @@ def get_required_env(*keys: str) -> dict:
             values[key] = value.strip()
 
     if missing:
-        raise EnvError(
-            f"[ENV ERROR] Missing required variables: {', '.join(missing)}"
-        )
+        print(f"\n❌ [ENV ERROR] Missing required variables: {', '.join(missing)}")
+        print(f"Please check your .env file.\n")
+        sys.exit(1)
 
     return values
